@@ -118,7 +118,7 @@ const Navbar = () => {
         <div className="navbar-end">
           <Link
             to="/contact"
-            className="btn bg-[#C08D5D] text-slate-950 border-none hover:opacity-90"
+            className="btn bg-[#C08D5D] rounded-full px-7 font-normal text-slate-950 border-none hover:opacity-90"
           >
             Contact Our Team
           </Link>
