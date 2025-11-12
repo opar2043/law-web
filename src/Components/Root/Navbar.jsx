@@ -1,107 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaGavel } from "react-icons/fa";
-import { FiChevronDown, FiMenu } from "react-icons/fi";
+import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
+
+const pagesItems = (
+  <>
+    <li><Link to="/case-studies">Case Studies</Link></li>
+    <li><Link to="/attorneys">Our Attorneys</Link></li>
+    <li><Link to="/faq">FAQ</Link></li>
+    <li><Link to="/blog">Blog</Link></li>
+    <li><Link to="/testimonials">Testimonials</Link></li>
+  </>
+);
+
+const DesktopLinks = () => (
+  <ul className="menu menu-horizontal px-1 text-[#F5F7FA]">
+    <li><Link to="/">Home</Link></li>
+    <li><Link to="/about">About Us</Link></li>
+    <li><Link to="/service">Services</Link></li>
+
+    <li><Link to="/contact">Contact Us</Link></li>
+  </ul>
+);
 
 const Navbar = () => {
-  const servicesItems = (
-    <>
-      <li><Link to="/services/corporate-law">Corporate Law</Link></li>
-      <li><Link to="/services/family-law">Family Law</Link></li>
-      <li><Link to="/services/criminal-defense">Criminal Defense</Link></li>
-      <li><Link to="/services/immigration">Immigration</Link></li>
-      <li><Link to="/services/real-estate">Real Estate</Link></li>
-    </>
-  );
+  const [open, setOpen] = useState(false);
 
-  const pagesItems = (
-    <>
-      <li><Link to="/case-studies">Case Studies</Link></li>
-      <li><Link to="/attorneys">Our Attorneys</Link></li>
-      <li><Link to="/faq">FAQ</Link></li>
-      <li><Link to="/blog">Blog</Link></li>
-      <li><Link to="/testimonials">Testimonials</Link></li>
-    </>
-  );
+  // lock body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
-  const DesktopLinks = () => (
-    <ul className="menu menu-horizontal px-1 text-[#F5F7FA]">
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/about">About Us</Link></li>
-
-      {/* Services dropdown (desktop) */}
-      <li tabIndex={0}>
-        <details>
-          <summary className="flex items-center gap-1">
-            Services <FiChevronDown className="text-sm" />
-          </summary>
-          <ul className="p-2 bg-base-100 text-base-content min-w-56 shadow rounded-box">
-            {servicesItems}
-          </ul>
-        </details>
-      </li>
-
-      {/* Pages dropdown (desktop) */}
-      <li tabIndex={0}>
-        <details>
-          <summary className="flex items-center gap-1">
-            Pages <FiChevronDown className="text-sm" />
-          </summary>
-          <ul className="p-2 bg-base-100 text-base-content min-w-56 shadow rounded-box">
-            {pagesItems}
-          </ul>
-        </details>
-      </li>
-
-      <li><Link to="/contact">Contact Us</Link></li>
-    </ul>
-  );
-
-  const MobileLinks = () => (
-    <ul
-      tabIndex={0}
-      className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-80 p-2 shadow text-base-content"
-    >
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/about">About Us</Link></li>
-
-      <li>
-        <details>
-          <summary className="flex items-center justify-between">
-            <span>Services</span> <FiChevronDown />
-          </summary>
-          <ul className="p-2">{servicesItems}</ul>
-        </details>
-      </li>
-
-      <li>
-        <details>
-          <summary className="flex items-center justify-between">
-            <span>Pages</span> <FiChevronDown />
-          </summary>
-          <ul className="p-2">{pagesItems}</ul>
-        </details>
-      </li>
-
-      <li><Link to="/contact">Contact Us</Link></li>
-    </ul>
-  );
+  const closeDrawer = () => setOpen(false);
 
   return (
     <div className="w-full sticky top-0 z-50">
-      <div className="navbar bg-base-200/60 backdrop-blur supports-[backdrop-filter]:bg-base-200/40 py-6">
+      <div className="navbar bg-base-200/60 backdrop-blur supports-[backdrop-filter]:bg-base-200/40 py-4 lg:py-6">
         {/* Left: hamburger + brand */}
         <div className="navbar-start">
-          <div className="dropdown">
-            <button
-              tabIndex={0}
-              aria-label="Open menu"
-              className="btn btn-ghost lg:hidden"
-            >
-              <FiMenu className="text-xl" />
-            </button>
-            <MobileLinks />
-          </div>
+          <button
+            aria-label="Open menu"
+            className="btn btn-ghost lg:hidden"
+            onClick={() => setOpen(true)}
+          >
+            <FiMenu className="text-2xl" />
+          </button>
 
           <Link to="/" className="btn btn-ghost text-xl text-[#F5F7FA]">
             <FaGavel className="mr-2" />
@@ -124,6 +69,78 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
+
+      {/* MOBILE DRAWER */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* overlay */}
+            <motion.button
+              aria-label="Close menu overlay"
+              onClick={closeDrawer}
+              className="fixed inset-0 z-40 bg-black/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* panel */}
+            <motion.aside
+              className="fixed left-0 top-0 z-50 h-full w-[84%] max-w-sm bg-base-100 text-base-content shadow-xl flex flex-col"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "tween", duration: 0.25 }}
+              role="dialog"
+              aria-modal="true"
+            >
+              {/* header */}
+              <div className="flex items-center justify-between px-4 py-4 border-b border-base-300">
+                <Link to="/" onClick={closeDrawer} className="flex items-center gap-2 text-lg">
+                  <FaGavel />
+                  <span className="font-semibold">ADVOCIUM</span>
+                </Link>
+                <button
+                  aria-label="Close menu"
+                  className="btn btn-ghost btn-sm"
+                  onClick={closeDrawer}
+                >
+                  <FiX className="text-xl" />
+                </button>
+              </div>
+
+              {/* links */}
+              <nav className="overflow-y-auto p-2">
+                <ul className="menu menu-sm">
+                  <li>
+                    <Link to="/" onClick={closeDrawer}>Home</Link>
+                  </li>
+                  <li>
+                    <Link to="/about" onClick={closeDrawer}>About Us</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" onClick={closeDrawer}>Services</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" onClick={closeDrawer}>Contact Us</Link>
+                  </li>
+                </ul>
+              </nav>
+
+              {/* footer CTA */}
+              <div className="mt-auto p-4 border-t border-base-300">
+                <Link
+                  to="/contact"
+                  onClick={closeDrawer}
+                  className="btn w-full bg-[#C08D5D] border-none text-slate-950 rounded-full"
+                >
+                  Contact Our Team
+                </Link>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
