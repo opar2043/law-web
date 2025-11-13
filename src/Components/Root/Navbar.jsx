@@ -2,25 +2,37 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGavel } from "react-icons/fa";
-import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
-
-const pagesItems = (
-  <>
-    <li><Link to="/case-studies">Case Studies</Link></li>
-    <li><Link to="/attorneys">Our Attorneys</Link></li>
-    <li><Link to="/faq">FAQ</Link></li>
-    <li><Link to="/blog">Blog</Link></li>
-    <li><Link to="/testimonials">Testimonials</Link></li>
-  </>
-);
+import { FiMenu, FiX } from "react-icons/fi";
 
 const DesktopLinks = () => (
-  <ul className="menu menu-horizontal px-1 text-[#F5F7FA]">
-    <li><Link to="/">Home</Link></li>
-    <li><Link to="/about">About Us</Link></li>
-    <li><Link to="/service">Services</Link></li>
-
-    <li><Link to="/contact">Contact Us</Link></li>
+  <ul className="flex items-center gap-8 text-[#F5F7FA] text-sm">
+    {[
+      { to: "/", label: "Home" },
+      { to: "/about", label: "About Us" },
+      { to: "/service", label: "Services" },
+      { to: "/contact", label: "Contact Us" },
+    ].map((item) => (
+      <li key={item.to} className="group relative">
+        <Link
+          to={item.to}
+          className="inline-flex items-center px-1 py-1 font-medium tracking-wide text-[#F5F7FA]/75 transition-colors duration-200 group-hover:text-[#F5F7FA]"
+        >
+          {item.label}
+        </Link>
+        {/* animated bottom border */}
+        <span
+          className="
+            pointer-events-none
+            absolute left-0 right-0 -bottom-1
+            h-[2px]
+            origin-left scale-x-0
+            bg-[#5D8DC0]
+            transition-transform duration-300
+            group-hover:scale-x-100
+          "
+        />
+      </li>
+    ))}
   </ul>
 );
 
@@ -30,7 +42,9 @@ const Navbar = () => {
   // lock body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   const closeDrawer = () => setOpen(false);
@@ -45,7 +59,7 @@ const Navbar = () => {
             className="btn btn-ghost lg:hidden"
             onClick={() => setOpen(true)}
           >
-            <FiMenu className="text-2xl" />
+            <FiMenu className="text-2xl text-[#F5F7FA]" />
           </button>
 
           <Link to="/" className="btn btn-ghost text-xl text-[#F5F7FA]">
@@ -63,7 +77,7 @@ const Navbar = () => {
         <div className="navbar-end">
           <Link
             to="/contact"
-            className="btn bg-[#C08D5D] rounded-full px-7 font-normal text-slate-950 border-none hover:opacity-90"
+            className="btn bg-[#C08D5D] hover:bg-[#5D8DC0] duration-300 rounded-full px-7 font-normal text-slate-950 border-none hover:opacity-90"
           >
             Contact Our Team
           </Link>
@@ -96,7 +110,11 @@ const Navbar = () => {
             >
               {/* header */}
               <div className="flex items-center justify-between px-4 py-4 border-b border-base-300">
-                <Link to="/" onClick={closeDrawer} className="flex items-center gap-2 text-lg">
+                <Link
+                  to="/"
+                  onClick={closeDrawer}
+                  className="flex items-center gap-2 text-lg"
+                >
                   <FaGavel />
                   <span className="font-semibold">ADVOCIUM</span>
                 </Link>
@@ -110,20 +128,44 @@ const Navbar = () => {
               </div>
 
               {/* links */}
-              <nav className="overflow-y-auto p-2">
-                <ul className="menu menu-sm">
-                  <li>
-                    <Link to="/" onClick={closeDrawer}>Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/about" onClick={closeDrawer}>About Us</Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" onClick={closeDrawer}>Services</Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" onClick={closeDrawer}>Contact Us</Link>
-                  </li>
+              <nav className="overflow-y-auto p-3">
+                <ul className="space-y-2">
+                  {[
+                    { to: "/", label: "Home" },
+                    { to: "/about", label: "About Us" },
+                    { to: "/service", label: "Services" },
+                    { to: "/contact", label: "Contact Us" },
+                  ].map((item) => (
+                    <li
+                      key={item.to}
+                      className="group relative rounded-lg"
+                    >
+                      <Link
+                        to={item.to}
+                        onClick={closeDrawer}
+                        className="
+                          block px-3 py-2 text-sm font-medium
+                          text-base-content/80
+                          transition-colors duration-200
+                          group-hover:text-base-content
+                        "
+                      >
+                        {item.label}
+                      </Link>
+                      {/* animated border for mobile (bottom) */}
+                      <span
+                        className="
+                          pointer-events-none
+                          absolute left-3 right-3 bottom-0
+                          h-[2px]
+                          origin-left scale-x-0
+                          bg-[#5D8DC0]
+                          transition-transform duration-300
+                          group-hover:scale-x-100
+                        "
+                      />
+                    </li>
+                  ))}
                 </ul>
               </nav>
 

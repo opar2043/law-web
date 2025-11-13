@@ -9,6 +9,9 @@ import {
 import Root from './Components/Root/Root';
 import Error from './Components/Root/Error';
 import Home from './Components/Root/Home';
+import About from './Components/Service/About';
+import Service from './Components/Service/Service';
+import Contact from './Components/Service/Contact';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -20,6 +23,18 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home></Home>
+      },
+      {
+        path: '/about',
+        element: <About></About>
+      },
+      {
+        path: '/contact',
+        element: <Contact></Contact>
+      },
+      {
+        path: '/service',
+        element:<Service></Service>
       },
     ]
   },
